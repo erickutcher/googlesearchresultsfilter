@@ -2,7 +2,7 @@
 	"description": "Filter Google Search results.",
 	"manifest_version": 2,
 	"name": "Google Search Results Filter",
-	"version": "1.0.0",
+	"version": "1.0.0.0",
 	"homepage_url": "https://erickutcher.github.io/#Google_Search_Results_Filter",
 
 	"applications":
