@@ -1,6 +1,6 @@
 /*
 	Google Search Results Filter
-	Copyright (C) 2017 Eric Kutcher
+	Copyright (C) 2017-2018 Eric Kutcher
 */
 
 function HandleMessages( request, sender, sendResponse )
@@ -9,12 +9,7 @@ function HandleMessages( request, sender, sendResponse )
 	{
 		browser.storage.local.get().then( function( options )
 		{
-			var filters = [];
-
-			if ( options && options.filters )
-			{
-				filters = options.filters;
-			}
+			var filters = ( options && options.filters != undefined ? options.filters : [] );
 
 			sendResponse( { filters: filters } );
 		} );
@@ -23,40 +18,34 @@ function HandleMessages( request, sender, sendResponse )
 	{
 		browser.storage.local.get().then( function( options )
 		{
-			var filters = [];
+			var filters = ( options && options.filters != undefined ? options.filters : [] );
 
-			if ( options )
+			if ( filters.indexOf( request.filter ) == -1 )
 			{
-				filters = options.filters;
-			}
-
-			if ( filters.indexOf( request.filters ) == -1 )
-			{
-				filters.push( request.filters );
+				filters.push( request.filter );
 
 				browser.storage.local.set( { filters: filters } );
 			}
 
-			sendResponse( { filters: request.filters } );
+			sendResponse( { filter: request.filter } );
 		} );
 	}
 	else if ( request.type == "REMOVE_FILTER" )
 	{
 		browser.storage.local.get().then( function( options )
 		{
-			if ( options && options.filters )
+			var filters = ( options && options.filters != undefined ? options.filters : [] );
+
+			var index = filters.indexOf( request.filter );
+
+			if ( index != -1 )
 			{
-				var index = options.filters.indexOf( request.filters );
+				filters.splice( index, 1 );
 
-				if ( index != -1 )
-				{
-					options.filters.splice( index, 1 );
-
-					browser.storage.local.set( { filters: options.filters } );
-				}
+				browser.storage.local.set( { filters: filters } );
 			}
 
-			sendResponse( { filters: request.filters } );
+			sendResponse( { filter: request.filter } );
 		} );
 	}
 	else if ( request.type == "SAVE_FILTERS" )

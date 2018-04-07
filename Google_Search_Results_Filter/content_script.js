@@ -1,11 +1,11 @@
 /*
 	Google Search Results Filter
-	Copyright (C) 2017 Eric Kutcher
+	Copyright (C) 2017-2018 Eric Kutcher
 */
 
 const DIV_CLASS_SEARCH_RESULT = "g";
 const A_CLASS_SEARCH_RESULT = "fl";
-const CITE_DIV_CLASS_SEARCH_RESULT = "kv";
+const CITE_DIV_CLASS_SEARCH_RESULT = "f";
 
 const DIV_ID_BOTTOM_RESULTS = "bres";
 
@@ -24,7 +24,7 @@ function UpdateFilters( type, filter )
 	browser.runtime.sendMessage(
 	{
 		type: type,
-		filters: filter
+		filter: filter
 	} )
 	.then( function ( response )
 	{
@@ -157,7 +157,7 @@ function RefreshFilters( show_all = false )
 	} )
 	.then( function ( response )
 	{
-		if ( response && response.filters )
+		if ( response )
 		{
 			filters = response.filters;
 

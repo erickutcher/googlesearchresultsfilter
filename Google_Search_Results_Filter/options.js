@@ -1,6 +1,6 @@
 /*
 	Google Search Results Filter
-	Copyright (C) 2017 Eric Kutcher
+	Copyright (C) 2017-2018 Eric Kutcher
 */
 
 function RefreshFilters()
@@ -16,7 +16,7 @@ function RefreshFilters()
 			var filters = "";
 			var total_filters = 0;
 
-			if ( response && response.filters && response.filters.length > 0 )
+			if ( response.filters != undefined && response.filters.length > 0 )
 			{
 				if ( response.filters[ 0 ] != "" )
 				{
