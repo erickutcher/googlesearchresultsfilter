@@ -4,8 +4,6 @@
 */
 
 const DIV_CLASS_SEARCH_RESULT = "g";
-const A_CLASS_SEARCH_RESULT = "fl";
-const CITE_DIV_CLASS_SEARCH_RESULT = "f";
 
 const DIV_ID_BOTTOM_RESULTS = "bres";
 
@@ -47,15 +45,13 @@ function UpdateSearchResults( show_all = false )
 	{
 		var search_result = search_results[ i ];
 
-		var citation = search_result.querySelector( "div." + CITE_DIV_CLASS_SEARCH_RESULT + " > cite:first-of-type" );
-
+		var citation = search_result.querySelector( "cite:first-of-type" );
 		if ( citation == null )
 		{
 			continue;
 		}
 
-		var url = search_result.querySelector( "h3 > a" );
-
+		var url = search_result.querySelector( "a:first-of-type" );
 		if ( url == null )
 		{
 			continue;
@@ -93,7 +89,7 @@ function UpdateSearchResults( show_all = false )
 		var show_hide_link = search_result.querySelector( "a." + A_CLASS_SHOW_HIDE );
 
 		var new_show_hide_link = document.createElement( "a" );
-		new_show_hide_link.className = A_CLASS_SEARCH_RESULT + " " + A_CLASS_SHOW_HIDE;
+		new_show_hide_link.className = A_CLASS_SHOW_HIDE;
 		new_show_hide_link.href = "javascript:;";
 
 		if ( filter )
@@ -133,15 +129,15 @@ function UpdateSearchResults( show_all = false )
 
 		if ( show_hide_link == null )
 		{
-			if ( citation.parentNode.lastChild.nodeName != "DIV" )
+			if ( url.parentNode.lastElementChild.nodeName != "SPAN" )
 			{
-				citation.parentNode.appendChild( document.createTextNode( "\u00A0\-\u00A0" ) );
+				url.parentNode.appendChild( document.createTextNode( "\u00A0\-\u00A0" ) );
 			}
-			citation.parentNode.appendChild( new_show_hide_link );
+			url.parentNode.appendChild( new_show_hide_link );
 		}
 		else
 		{
-			citation.parentNode.replaceChild( new_show_hide_link, show_hide_link );
+			url.parentNode.replaceChild( new_show_hide_link, show_hide_link );
 		}
 	}
 
@@ -183,14 +179,22 @@ function Initialize()
 	hide_all_a.addEventListener( "click", function() { UpdateSearchResults(); }, false );
 
 	var show_hide_all_div = document.createElement( "div" );
-	show_hide_all_div.style = "font-style: italic;";
+	show_hide_all_div.style = "display: inline-block; font-style: italic;";
 	show_hide_all_div.appendChild( show_all_a );
 	show_hide_all_div.appendChild( hide_all_a );
 
 	var bottom_results = document.getElementById( DIV_ID_BOTTOM_RESULTS );
 	if ( bottom_results != null )
 	{
-		bottom_results.parentNode.insertBefore( show_hide_all_div, bottom_results.nextSibling );
+		if ( bottom_results.childElementCount > 0 )
+		{
+			show_hide_all_div.style.marginBottom = "26px";
+			bottom_results.insertBefore( show_hide_all_div, bottom_results.firstChild );
+		}
+		else
+		{
+			bottom_results.appendChild( show_hide_all_div );
+		}
 
 		RefreshFilters();
 	}
